@@ -87,7 +87,7 @@ resource "aws_route_table_association" "public_rt3" {
 
 #Create securtiy group to allow http and ssh access
 resource "aws_security_group" "web_sg" {
-  Name        = "http_ssh_sg"
+  name        = "http_ssh_sg"
   description = "http and ssh allowed into ec2 instances"
   vpc_id      = aws_vpc.myvpc_vpc.id
   #Allow SSH access.
@@ -123,7 +123,7 @@ resource "aws_instance" "Instance_01" {
   subnet_id       = aws_subnet.subnet_east1a.id
   security_groups = [aws_security_group.web_sg.id]
   tags = {
-    "Name" = "web-instance-1"
+    "name" = "web-instance-1"
   }
   user_data = <<-EOF
     #!/bin/bash
@@ -146,7 +146,7 @@ resource "aws_instance" "Instance_02" {
   subnet_id       = aws_subnet.subnet_east1b.id
   security_groups = [aws_security_group.web_sg.id]
   tags = {
-    "Name" = "web-instance-2"
+    "name" = "web-instance-2"
   }
 
   user_data = <<-EOF
@@ -171,7 +171,7 @@ resource "aws_instance" "Instance_03" {
   subnet_id       = aws_subnet.subnet_east1c.id
   security_groups = [aws_security_group.web_sg.id]
   tags = {
-    "Name" = "web-instance-3ter "
+    "name" = "web-instance-3ter "
   }
   user_data = <<-EOF
     #!/bin/bash
