@@ -171,7 +171,7 @@ resource "aws_instance" "Instance_03" {
   subnet_id       = aws_subnet.subnet_east1c.id
   security_groups = [aws_security_group.web_sg.id]
   tags = {
-    "name" = "web-instance-3ter "
+    "name" = "web-instance-3"
   }
   user_data = <<-EOF
     #!/bin/bash
