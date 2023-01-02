@@ -22,7 +22,7 @@ resource "aws_vpc" "myvpc_vpc" {
     Name = "myvpc_vpc"
   }
 }
-
+# create subnet for each AZ's
 resource "aws_subnet" "subnet_east1a" {
   vpc_id                  = aws_vpc.myvpc_vpc.id
   cidr_block              = "10.0.1.0/24"
