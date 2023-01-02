@@ -122,7 +122,9 @@ resource "aws_instance" "Instance_01" {
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.subnet_east1a.id
   security_groups = [aws_security_group.web_sg.id]
-
+  tags = {
+    "name" = "web-instance-1"
+  }
   user_data = <<-EOF
     #!/bin/bash
     yum -y update
@@ -143,6 +145,9 @@ resource "aws_instance" "Instance_02" {
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.subnet_east1b.id
   security_groups = [aws_security_group.web_sg.id]
+  tags = {
+    "name" = "web-instance-2"
+  }
 
   user_data = <<-EOF
     #!/bin/bash
@@ -165,7 +170,9 @@ resource "aws_instance" "Instance_03" {
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.subnet_east1c.id
   security_groups = [aws_security_group.web_sg.id]
-
+  tags = {
+    "name" = "web-instance-3ter "
+  }
   user_data = <<-EOF
     #!/bin/bash
     yum -y update
