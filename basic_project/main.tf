@@ -122,6 +122,7 @@ resource "aws_instance" "Instance_01" {
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.subnet_east1a.id
   security_groups = [aws_security_group.web_sg.id]
+  key_name = "Test_KeyPair"
   tags = {
     "name" = "web-instance-1"
   }
@@ -131,7 +132,6 @@ resource "aws_instance" "Instance_01" {
     yum -y install httpd
     systemctl start httpd
     systemctl enable httpd
-
     echo '<!DOCTYPE html>' > /var/www/html/index.html
     echo '<html lang="en">' >> /var/www/html/index.html
     echo '<head><title>Terraform Deployment Test</title></head>'  >> /var/www/html/index.html
@@ -145,6 +145,7 @@ resource "aws_instance" "Instance_02" {
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.subnet_east1b.id
   security_groups = [aws_security_group.web_sg.id]
+  key_name = "Test_KeyPair"
   tags = {
     "name" = "web-instance-2"
   }
@@ -155,7 +156,6 @@ resource "aws_instance" "Instance_02" {
     yum -y install httpd
     systemctl start httpd
     systemctl enable httpd
-
     echo '<!DOCTYPE html>' > /var/www/html/index.html
     echo '<html lang="en">' >> /var/www/html/index.html
     echo '<head><title>Terraform Deployment Test</title></head>'  >> /var/www/html/index.html
@@ -170,6 +170,7 @@ resource "aws_instance" "Instance_03" {
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.subnet_east1c.id
   security_groups = [aws_security_group.web_sg.id]
+  key_name = "Test_KeyPair"
   tags = {
     "name" = "web-instance-3"
   }
@@ -179,7 +180,6 @@ resource "aws_instance" "Instance_03" {
     yum -y install httpd
     systemctl start httpd
     systemctl enable httpd
-
     echo '<!DOCTYPE html>' > /var/www/html/index.html
     echo '<html lang="en">' >> /var/www/html/index.html
     echo '<head><title>Terraform Deployment Test</title></head>'  >> /var/www/html/index.html
