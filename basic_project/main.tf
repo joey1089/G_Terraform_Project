@@ -95,7 +95,7 @@ resource "aws_security_group" "web_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] 
+    cidr_blocks = ["0.0.0.0/0"]
     #ip removed
   }
 
@@ -116,13 +116,74 @@ resource "aws_security_group" "web_sg" {
   }
 }
 
+#Create Application Load Balancer's target group
+resource "aws_alb_target_group" "alb_targer_grp" {
+  name     = "alb-target-group"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.myvpc_vpc.id
+  health_check {
+    enabled             = true
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    healthy_threshold   = 3
+    unhealthy_threshold = 2
+    timeout             = 3
+  }
+}
+#Create Application Load Balancer target group attachment
+resource "aws_lb_target_group_attachment" "attach-instance01" {
+  target_group_arn = aws_alb_target_group.alb_targer_grp.arn
+  target_id        = aws_instance.Instance_01.id
+  port             = 80
+}
+resource "aws_lb_target_group_attachment" "attach-instance02" {
+  target_group_arn = aws_alb_target_group.alb_targer_grp.arn
+  target_id        = aws_instance.Instance_02.id
+  port             = 80
+}
+resource "aws_lb_target_group_attachment" "attach-instance03" {
+  target_group_arn = aws_alb_target_group.alb_targer_grp.arn
+  target_id        = aws_instance.Instance_03.id
+  port             = 80
+}
+
+# Create Application load balancer lister
+resource "aws_lb_listener" "web_alb_listener" {
+  load_balancer_arn = aws_lb.web_alb.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.alb_targer_grp.arn
+  }
+}
+#Create Application Load Balancer 
+resource "aws_lb" "web_alb" {
+  name                       = "web-loadbalancer"
+  internal                   = false
+  load_balancer_type         = "application"
+  security_groups            = [aws_security_group.web_sg.id]
+  subnets                    = [aws_subnet.subnet_east1a.id, aws_subnet.subnet_east1b.id, aws_subnet.subnet_east1c.id]
+  enable_deletion_protection = true
+  tags = {
+    Environment = "Test"
+  }
+}
+output "load_balancer_dns_name" {
+  description = "Get load balancer name"
+  value = aws_lb.web_alb.dns_name
+}
+
 # Create ec2_instance01 in AZ east-1a
 resource "aws_instance" "Instance_01" {
   ami             = "ami-0b5eea76982371e91"
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.subnet_east1a.id
   security_groups = [aws_security_group.web_sg.id]
-  key_name = "Test_KeyPair"
+  key_name        = "Test_KeyPair"
   tags = {
     "name" = "web-instance-1"
   }
@@ -145,7 +206,7 @@ resource "aws_instance" "Instance_02" {
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.subnet_east1b.id
   security_groups = [aws_security_group.web_sg.id]
-  key_name = "Test_KeyPair"
+  key_name        = "Test_KeyPair"
   tags = {
     "name" = "web-instance-2"
   }
@@ -170,7 +231,7 @@ resource "aws_instance" "Instance_03" {
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.subnet_east1c.id
   security_groups = [aws_security_group.web_sg.id]
-  key_name = "Test_KeyPair"
+  key_name        = "Test_KeyPair"
   tags = {
     "name" = "web-instance-3"
   }
