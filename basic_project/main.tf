@@ -128,7 +128,7 @@ resource "aws_alb_target_group" "alb_targer_grp" {
     port                = "traffic-port"
     protocol            = "HTTP"
     healthy_threshold   = 3
-    unhealthy_threshold = 2
+    unhealthy_threshold = 3
     timeout             = 3
   }
 }
@@ -136,6 +136,7 @@ resource "aws_alb_target_group" "alb_targer_grp" {
 resource "aws_lb_target_group_attachment" "attach-instance01" {
   target_group_arn = aws_alb_target_group.alb_targer_grp.arn
   target_id        = aws_instance.Instance_01.id
+  #target_id        = aws_instance.Instance_01.arn # only for Lambda funtion, you need to switch to arn
   port             = 80
 }
 resource "aws_lb_target_group_attachment" "attach-instance02" {
@@ -174,7 +175,7 @@ resource "aws_lb" "web_alb" {
 }
 output "load_balancer_dns_name" {
   description = "Get load balancer name"
-  value = aws_lb.web_alb.dns_name
+  value       = aws_lb.web_alb.dns_name
 }
 
 # Create ec2_instance01 in AZ east-1a
@@ -183,7 +184,7 @@ resource "aws_instance" "Instance_01" {
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.subnet_east1a.id
   security_groups = [aws_security_group.web_sg.id]
-  key_name        = "Test_KeyPair"
+  key_name        = "Test_KeyPair1"
   tags = {
     "name" = "web-instance-1"
   }
@@ -197,7 +198,7 @@ resource "aws_instance" "Instance_01" {
     echo '<html lang="en">' >> /var/www/html/index.html
     echo '<head><title>Terraform Deployment Test</title></head>'  >> /var/www/html/index.html
     echo '<body style="background-color:rgb(109, 185, 109);">' >> /var/www/html/index.html
-    echo '<h2 style="color:rgb(100, 27, 27);">Terraform deployed web server-01.</h2>' >> /var/www/html/index.html
+    echo '<h1 style="color:rgb(100, 27, 27);">Terraform deployed web server-01.</h1>' >> /var/www/html/index.html
     EOF
 }
 #Create ec2 instance02 in AZ east-1b
@@ -206,7 +207,7 @@ resource "aws_instance" "Instance_02" {
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.subnet_east1b.id
   security_groups = [aws_security_group.web_sg.id]
-  key_name        = "Test_KeyPair"
+  key_name        = "Test_KeyPair1"
   tags = {
     "name" = "web-instance-2"
   }
@@ -231,7 +232,7 @@ resource "aws_instance" "Instance_03" {
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.subnet_east1c.id
   security_groups = [aws_security_group.web_sg.id]
-  key_name        = "Test_KeyPair"
+  key_name        = "Test_KeyPair1"
   tags = {
     "name" = "web-instance-3"
   }
@@ -248,3 +249,24 @@ resource "aws_instance" "Instance_03" {
     echo '<h1 style="color:rgb(100, 27, 27);">Terraform deployed web server-03.</h1>' >> /var/www/html/index.html
     EOF
 }
+
+#Create Auto scaling group Launch Template --- not working code - client error on launch
+# resource "aws_launch_template" "asg_launch_template" {
+#   name_prefix   = "ec2-instance-"
+#   image_id      = "ami-0b5eea76982371e91"
+#   instance_type = "t2.micro"
+# }
+
+# #Create Auto Scaling group
+# resource "aws_autoscaling_group" "asg_group" {
+#   availability_zones = ["us-east-1a"]
+#   desired_capacity   = 3
+#   max_size           = 5
+#   min_size           = 3
+#   wait_for_capacity_timeout = "3m"
+
+#   launch_template {
+#     id      = aws_launch_template.asg_launch_template.id
+#     version = "$Latest"
+#   }
+# }
