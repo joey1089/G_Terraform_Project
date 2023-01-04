@@ -197,7 +197,7 @@ resource "aws_instance" "Instance_01" {
     echo '<html lang="en">' >> /var/www/html/index.html
     echo '<head><title>Terraform Deployment Test</title></head>'  >> /var/www/html/index.html
     echo '<body style="background-color:rgb(109, 185, 109);">' >> /var/www/html/index.html
-    echo '<h1 style="color:rgb(100, 27, 27);">Terraform deployed web server.</h1>' >> /var/www/html/index.html
+    echo '<h2 style="color:rgb(100, 27, 27);">Terraform deployed web server-01.</h2>' >> /var/www/html/index.html
     EOF
 }
 #Create ec2 instance02 in AZ east-1b
@@ -221,7 +221,7 @@ resource "aws_instance" "Instance_02" {
     echo '<html lang="en">' >> /var/www/html/index.html
     echo '<head><title>Terraform Deployment Test</title></head>'  >> /var/www/html/index.html
     echo '<body style="background-color:rgb(109, 185, 109);">' >> /var/www/html/index.html
-    echo '<h1 style="color:rgb(100, 27, 27);">Terraform deployed web server.</h1>' >> /var/www/html/index.html
+    echo '<h1 style="color:rgb(100, 27, 27);">Terraform deployed web server-02.</h1>' >> /var/www/html/index.html
     EOF
 }
 
@@ -245,6 +245,6 @@ resource "aws_instance" "Instance_03" {
     echo '<html lang="en">' >> /var/www/html/index.html
     echo '<head><title>Terraform Deployment Test</title></head>'  >> /var/www/html/index.html
     echo '<body style="background-color:rgb(109, 185, 109);">' >> /var/www/html/index.html
-    echo '<h1 style="color:rgb(100, 27, 27);">Terraform deployed web server.</h1>' >> /var/www/html/index.html
+    echo '<h1 style="color:rgb(100, 27, 27);">Terraform deployed web server-03.</h1>' >> /var/www/html/index.html
     EOF
 }
